@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -20,7 +20,6 @@ public class RestoranController {
     RestoranService service;
 
     @PostMapping
-    @ResponseStatus(CREATED)
     public RestoranResponse save(@RequestBody RestoranRequest request) {
         return service.save(request);
     }
@@ -31,7 +30,7 @@ public class RestoranController {
     }
 
     @GetMapping
-    public Set<RestoranResponse> findAll() {
+    public List<RestoranResponse> findAll() {
         return service.findAll();
     }
 }
