@@ -11,6 +11,7 @@ import com.example.msrestoran.util.CacheUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,14 +29,20 @@ import static lombok.AccessLevel.PRIVATE;
 public class RestoranServiceImpl implements RestoranService {
     RestoranRepositroy repositroy;
     CacheUtil util;
+    KafkaTemplate<String, RestoranResponse> kafkaTemplate;
+    static String TOPIC = "restaurant-events";
 
     @Override
     public RestoranResponse save(RestoranRequest request) {
-        RestoranEntity entity = RestoranMapping.requestToEntity(request);
+        RestoranEntity entity = RestoranMapping.RESTORAN.requestToEntity(request);
         repositroy.save(entity);
+        RestoranResponse response = RestoranMapping.RESTORAN.entityToResponse(entity);
+        log.info("kafka send");
+        kafkaTemplate.send(TOPIC, response);
+        log.info("kafka accept");
         util.set(getKey(entity.getId()), entity, 10, TimeUnit.MINUTES);
         System.out.println("🟢 DB-dən oxundu və Redis-ə yazıldı!");
-        return RestoranMapping.entityToResponse(entity);
+        return response;
     }
 
     @Override
@@ -43,13 +50,13 @@ public class RestoranServiceImpl implements RestoranService {
         RestoranEntity entitycache = util.get(getKey(id),RestoranEntity.class);
         if (entitycache != null) {
             System.out.println("🔴 Redis-dən oxundu!");
-            return RestoranMapping.entityToResponse(entitycache);
+            return RestoranMapping.RESTORAN.entityToResponse(entitycache);
         }
         RestoranEntity entity = fetchRestoranIfExist(id);
         util.set(getKey(entity.getId()), entity, 10, TimeUnit.MINUTES);
         System.out.println("🟢 DB-dən oxundu və Redis-ə yazıldı!");
 
-        return RestoranMapping.entityToResponse(entity);
+        return RestoranMapping.RESTORAN.entityToResponse(entity);
     }
 
     @Override
@@ -86,7 +93,7 @@ public class RestoranServiceImpl implements RestoranService {
         log.info("RestaurantServiceImpl.findAll.end");
 
         return result.stream()
-                .map(RestoranMapping::entityToResponse)
+                .map(RestoranMapping.RESTORAN::entityToResponse)
                 .toList();
     }
 

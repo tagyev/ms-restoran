@@ -8,8 +8,9 @@ import java.time.LocalDateTime;
 
 import static com.example.msrestoran.enums.RestoranStatus.ACTIVE;
 
-public class RestoranMapping {
-    public static RestoranEntity requestToEntity(RestoranRequest request) {
+public enum RestoranMapping {
+    RESTORAN;
+    public RestoranEntity requestToEntity(RestoranRequest request) {
         return RestoranEntity.builder()
                 .name(request.getName())
                 .address(request.getAddress())
@@ -18,7 +19,7 @@ public class RestoranMapping {
                 .build();
     }
 
-    public static RestoranResponse entityToResponse(RestoranEntity entity) {
+    public RestoranResponse entityToResponse(RestoranEntity entity) {
         return RestoranResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
