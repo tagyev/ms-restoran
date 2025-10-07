@@ -62,7 +62,7 @@ public class RestoranServiceImpl implements RestoranService {
     @Override
     public List<RestoranResponse> findAll() {
         log.info("RestaurantServiceImpl.findAll.start");
-        List<Long> allIds = repositroy.findAllIds();
+        List<Long> allIds = repositroy.findAllByStatusIn();
         List<String> keys = allIds.stream()
                 .map(id -> "Restoran:" + id)
                 .toList();
