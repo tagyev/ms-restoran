@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandle {
 
-    @ExceptionHandler(RestoranNotFoundException.class)
-    public ExceptionResponse handleAccountNotFound(RestoranNotFoundException ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ExceptionResponse handleAccountNotFound(NotFoundException ex) {
         log.error("Account not found: {}", ex.getMessage(), ex);
         return ExceptionResponse.builder()
                 .timestamp(LocalDateTime.now())

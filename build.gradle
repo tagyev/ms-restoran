@@ -42,7 +42,7 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     // Liquibase
     implementation 'org.liquibase:liquibase-core'
-//    Postgresql
+    // Postgresql
     runtimeOnly 'org.postgresql:postgresql'
 
     // testing

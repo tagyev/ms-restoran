@@ -6,13 +6,10 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    hibernate:
-      ddl-auto: none
     show-sql: true
 
   liquibase:
     change-log: classpath:db/changelog/master.yaml
-    drop-first: false
 
   kafka:
     bootstrap-servers: localhost:9092
